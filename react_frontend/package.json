@@ -1,0 +1,28 @@
+{
+  "name": "event-booking-react-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "React frontend for Event Booking System",
+  "scripts": {
+    "start": "webpack serve --mode development --open --hot",
+    "build": "webpack --mode production",
+    "serve": "webpack serve --mode development --hot"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^6.10.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  }
+}
