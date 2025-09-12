@@ -1,34 +1,322 @@
-/* CSS Variables for Theme Management */
+/* CSS Variables for Theme Management + Brand */
 :root {
   /* Light theme colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
+  --bg-secondary: #f7f8fa;
+  --surface: #ffffff;
+  --text-primary: #141821;
+  --text-muted: rgba(20, 24, 33, 0.7);
+  --accent: #E87A41; /* KAVIA orange */
+  --accent-strong: #cf6b39;
+  --link: #0a84ff;
+  --border-color: #e6e8ec;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+
+  --button-bg: var(--accent);
   --button-text: #ffffff;
+
+  --focus: 0 0 0 3px rgba(232, 122, 65, 0.35);
 }
 
 [data-theme="dark"] {
   /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  --bg-primary: #0f1115;
+  --bg-secondary: #141821;
+  --surface: #171b25;
+  --text-primary: #f5f7fa;
+  --text-muted: rgba(245, 247, 250, 0.7);
+  --accent: #E87A41;
+  --accent-strong: #ff8a4f;
+  --link: #61dafb;
+  --border-color: #2a2f3a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.35);
+
+  --button-bg: var(--accent);
+  --button-text: #111317;
+
+  --focus: 0 0 0 3px rgba(232, 122, 65, 0.45);
+}
+
+/* Base layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  min-height: 100%;
 }
 
 .App {
-  text-align: center;
+  text-align: left;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+/* Header / Navbar */
+.App-header {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  padding: 12px 16px;
+}
+
+.navbar {
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Typography */
+.title {
+  margin: 0.2rem 0 0.4rem;
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin: 0.2rem 0 1rem;
+  font-size: clamp(1rem, 0.95rem + 0.5vw, 1.25rem);
+  color: var(--text-muted);
+}
+
+.description {
+  margin: 0.25rem 0 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Links */
+.App-link {
+  color: var(--link);
+  text-decoration: none;
+}
+.App-link:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+.theme-toggle,
+.btn {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, opacity 0.2s ease;
+  box-shadow: var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle:hover,
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  opacity: 0.95;
+}
+
+.theme-toggle:active,
+.btn:active {
+  transform: translateY(0);
+}
+
+.theme-toggle:focus-visible,
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+/* Keep toggle aligned to right of navbar */
+.theme-toggle {
+  margin-left: auto;
+  position: static; /* reset absolute from template */
+}
+
+/* Event grid for EventsList */
+.events-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.events-grid > * {
+  grid-column: span 4; /* 3 per row on large */
+}
+
+@media (max-width: 1024px) {
+  .events-grid > * {
+    grid-column: span 6; /* 2 per row on medium */
+  }
+}
+
+@media (max-width: 640px) {
+  .events-grid {
+    gap: 12px;
+  }
+  .events-grid > * {
+    grid-column: span 12; /* 1 per row on small */
+  }
+}
+
+/* Event Card polish (component attaches className="event-card") */
+.event-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+a:has(.event-card),
+.event-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* Info tiles on EventDetail */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+
+.info-grid > .info-tile {
+  grid-column: span 3; /* 4 columns on large */
+}
+
+@media (max-width: 960px) {
+  .info-grid > .info-tile {
+    grid-column: span 6; /* 2 columns on medium */
+  }
+}
+
+@media (max-width: 560px) {
+  .info-grid > .info-tile {
+    grid-column: span 12; /* 1 column on small */
+  }
+}
+
+.info-tile {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Booking form styles */
+.booking-form {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+  max-width: 540px;
+}
+
+.form-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.3s ease;
+}
+
+.input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+}
+
+.input[disabled],
+select[disabled],
+textarea[disabled],
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.alert {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 14px;
+}
+
+.alert.error {
+  border-color: crimson;
+  color: crimson;
+  background: color-mix(in srgb, crimson 8%, transparent);
+}
+
+.alert.success {
+  border-color: seagreen;
+  color: seagreen;
+  background: color-mix(in srgb, seagreen 8%, transparent);
+}
+
+/* Utility classes */
+.mt-0 { margin-top: 0 !important; }
+.mt-8 { margin-top: 8px !important; }
+.mt-12 { margin-top: 12px !important; }
+.mt-16 { margin-top: 16px !important; }
+.mt-24 { margin-top: 24px !important; }
+
+.grid { display: grid; }
+.grid-gap-12 { gap: 12px; }
+.grid-gap-16 { gap: 16px; }
+
+/* Optional: smooth logo animation kept for completeness */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -40,65 +328,15 @@
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
-}
-
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
-}
-
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
-}
-
-.theme-toggle:active {
-  transform: translateY(0);
-}
-
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Responsive design for mobile */
+/* Small screens adjustments for header actions */
 @media (max-width: 768px) {
   .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
+    padding: 8px 14px;
     font-size: 12px;
   }
 }
