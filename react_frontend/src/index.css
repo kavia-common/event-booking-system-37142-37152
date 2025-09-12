@@ -99,6 +99,15 @@ button { cursor: pointer; }
 .button.danger { background: var(--danger); }
 .button:disabled { opacity: .6; cursor: not-allowed; }
 .button:hover { filter: brightness(0.95); }
+.button.secondary:hover, .button.accent:hover, .button.danger:hover { filter: brightness(0.97); }
+
+.status {
+  background: rgba(22,163,74,0.1);
+  color: #166534;
+  border: 1px solid rgba(22,163,74,0.3);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+}
 
 .input, .select {
   width: 100%;

@@ -16,8 +16,10 @@ export default function BookingForm({ event, onBooked }) {
   const [submitting, setSubmitting] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [submitError, setSubmitError] = React.useState('');
+  const [successMsg, setSuccessMsg] = React.useState('');
 
   const available = event?.available_seats ?? 0;
+  const soldOut = available <= 0;
 
   const validate = () => {
     const e = {};
@@ -39,6 +41,7 @@ export default function BookingForm({ event, onBooked }) {
   const openConfirm = (e) => {
     e.preventDefault();
     setSubmitError('');
+    setSuccessMsg('');
     if (validate()) setConfirmOpen(true);
   };
 
@@ -57,7 +60,10 @@ export default function BookingForm({ event, onBooked }) {
       const res = await createBooking(payload);
       setConfirmOpen(false);
       setValues({ user_name: '', user_email: '', seats_booked: 1 });
+      setSuccessMsg('Booking confirmed! Your seats have been reserved.');
       onBooked?.(res);
+      // Automatically clear success message after a few seconds
+      setTimeout(() => setSuccessMsg(''), 4000);
     } catch (err) {
       const msg = err?.response?.data?.detail || err?.message || 'Failed to create booking.';
       setSubmitError(String(msg));
@@ -73,6 +79,12 @@ export default function BookingForm({ event, onBooked }) {
         Available seats: <span className="badge" aria-label={`Available seats ${available}`}>{available}</span>
       </p>
 
+      {successMsg && (
+        <div role="status" aria-live="polite" style={{ background: 'rgba(22,163,74,0.1)', color: '#166534', border: '1px solid rgba(22,163,74,0.3)', padding: 10, borderRadius: 6, marginBottom: 8 }}>
+          {successMsg}
+        </div>
+      )}
+
       <form onSubmit={openConfirm} noValidate>
         <div className="row">
           <div>
@@ -84,6 +96,7 @@ export default function BookingForm({ event, onBooked }) {
               onChange={handleChange}
               placeholder="Jane Doe"
               required
+              disabled={soldOut}
             />
             {errors.user_name && <div className="error">{errors.user_name}</div>}
           </div>
@@ -98,6 +111,7 @@ export default function BookingForm({ event, onBooked }) {
               onChange={handleChange}
               placeholder="jane@example.com"
               required
+              disabled={soldOut}
             />
             {errors.user_email && <div className="error">{errors.user_email}</div>}
           </div>
@@ -115,14 +129,16 @@ export default function BookingForm({ event, onBooked }) {
             onChange={handleChange}
             placeholder="1"
             required
+            disabled={soldOut}
           />
           {errors.seats_booked && <div className="error">{errors.seats_booked}</div>}
+          {soldOut && <div className="error" role="alert" style={{ marginTop: 8 }}>No seats available for this event.</div>}
         </div>
 
         {submitError && <div className="error" role="alert" style={{ marginTop: 12 }}>{submitError}</div>}
 
         <div style={{ marginTop: 16, display: 'flex', justifyContent: 'flex-end' }}>
-          <button className="button accent" type="submit" disabled={submitting}>
+          <button className="button accent" type="submit" disabled={submitting || soldOut} aria-disabled={submitting || soldOut}>
             {submitting ? 'Submitting...' : 'Review & Confirm'}
           </button>
         </div>
